@@ -1,6 +1,7 @@
 import { UserRepository } from "../repositories/user.repository";
+import { User } from "../models/user";
 export declare class LoginController {
-    private userRepo;
+    protected userRepo: UserRepository;
     constructor(userRepo: UserRepository);
-    sendUserInfo(username: string, password: string): Promise<boolean>;
+    loginUser(user: User): Promise<User>;
 }

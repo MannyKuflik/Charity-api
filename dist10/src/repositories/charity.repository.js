@@ -13,17 +13,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
-const user_1 = require("../models/user");
+const charity_1 = require("../models/charity");
 const core_1 = require("@loopback/core");
-let UserRepository = class UserRepository extends repository_1.DefaultCrudRepository {
+let CharityRepository = class CharityRepository extends repository_1.DefaultCrudRepository {
     constructor(datasource) {
-        super(user_1.User, datasource);
+        super(charity_1.Charity, datasource);
         this.datasource = datasource;
     }
 };
-UserRepository = __decorate([
+CharityRepository = __decorate([
     __param(0, core_1.inject('datasources.db')),
     __metadata("design:paramtypes", [repository_1.juggler.DataSource])
-], UserRepository);
-exports.UserRepository = UserRepository;
-//# sourceMappingURL=user.repository.js.map
+], CharityRepository);
+exports.CharityRepository = CharityRepository;
+//# sourceMappingURL=charity.repository.js.map

@@ -1,6 +1,6 @@
 import { DefaultCrudRepository, juggler } from '@loopback/repository';
-import { User } from '../models/user';
-export declare class UserRepository extends DefaultCrudRepository<User, typeof User.prototype.id> {
+import { Charity } from '../models/charity';
+export declare class CharityRepository extends DefaultCrudRepository<Charity, typeof Charity.prototype.id> {
     protected datasource: juggler.DataSource;
     constructor(datasource: juggler.DataSource);
 }
