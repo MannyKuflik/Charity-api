@@ -23,7 +23,6 @@ let UserController = class UserController {
         return await this.userRepo.find();
     }
     async findUsersById(id) {
-        // Check for valid ID
         let userExists = !!(await this.userRepo.count({ id }));
         if (!userExists) {
             throw new rest_1.HttpErrors.BadRequest(`user ID ${id} does not exist`);

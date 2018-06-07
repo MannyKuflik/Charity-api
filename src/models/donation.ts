@@ -18,16 +18,16 @@ export class Donation extends Entity {
     amount: number;
 
     @property({
-        type: 'User',
+        type: 'number',
         required: true
     })
-    user: User;
+    user_id: number;
 
     @property({
-        type: 'Charity',
+        type: 'number',
         required: true
     })
-    charity: Charity;
+    charity_id: number;
 
     getId() {
         return this.id;

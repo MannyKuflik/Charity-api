@@ -6,9 +6,9 @@ import { Payment } from '../models/payment';
 })
 export class PaymentMethod extends Entity {
     @property({
-        type: 'Payment',
+        type: 'number',
     })
-    payment: Payment;
+    payment_id: number;
 
     @property({
         type: 'number',
