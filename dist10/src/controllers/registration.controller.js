@@ -32,21 +32,29 @@ const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
 const user_1 = require("../models/user");
 const rest_1 = require("@loopback/rest");
+const bcrypt = require("bcrypt");
 let RegistrationController = class RegistrationController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
     async registerUser(user) {
-        // Check that required fields are supplied
         if (!user.email || !user.password) {
             throw new rest_1.HttpErrors.BadRequest('missing data');
         }
-        // Check that user does not already exist
         let userExists = !!(await this.userRepo.count({ email: user.email }));
         if (userExists) {
             throw new rest_1.HttpErrors.BadRequest('user already exists');
         }
-        return await this.userRepo.create(user);
+        let hashedPassword = await bcrypt.hash(user.password, 10);
+        var newUser = new user_1.User();
+        newUser.firstname = user.firstname;
+        newUser.lastname = user.lastname;
+        newUser.email = user.email;
+        newUser.id = user.id;
+        newUser.password = hashedPassword;
+        let storedUser = await this.userRepo.create(newUser);
+        storedUser.password = "";
+        return storedUser;
     }
 };
 __decorate([

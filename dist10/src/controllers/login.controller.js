@@ -16,33 +16,62 @@ const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
 const user_1 = require("../models/user");
 const rest_1 = require("@loopback/rest");
+const jsonwebtoken_1 = require("jsonwebtoken");
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
     async loginUser(user) {
-        // Check that email and password are both supplied
+        /* // Check that email and password are both supplied
         if (!user.email || !user.password) {
-            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+          throw new HttpErrors.Unauthorized('invalid credentials');
         }
+    
         // Check that email and password are valid
-        let userExists = !!(await this.userRepo.count({
-            and: [
-                { email: user.email },
-                { password: user.password },
-            ],
+        let userExists: boolean = !!(await this.userRepo.count({
+          and: [
+            { email: user.email },
+            { password: user.password },
+          ],
         }));
+    
         if (!userExists) {
-            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+          throw new HttpErrors.Unauthorized('invalid credentials');
         }
+    
         return await this.userRepo.findOne({
-            where: {
-                and: [
-                    { email: user.email },
-                    { password: user.password }
-                ],
-            },
+          where: {
+            and: [
+              { email: user.email },
+              { password: user.password }
+            ],
+          },
         });
+      } */
+        var users = await this.userRepo.find();
+        var email = user.email;
+        var password = user.password;
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            if (user.email == email && user.password == password) {
+                var jwt = jsonwebtoken_1.sign({
+                    user: {
+                        id: user.id,
+                        firstname: user.firstname,
+                        email: user.email
+                    },
+                    anything: "hello"
+                }, 'shh', {
+                    issuer: 'auth.ix.co.za',
+                    audience: 'ix.co.za',
+                });
+                return {
+                    token: jwt,
+                };
+            }
+        }
+        throw new rest_1.HttpErrors.Unauthorized('User not found, sorry!');
+        //return "Error";
     }
 };
 __decorate([

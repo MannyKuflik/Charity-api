@@ -2,6 +2,8 @@ import { repository } from '@loopback/repository';
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
 import { HttpErrors, get, param } from '@loopback/rest';
+import { sign, verify } from'jsonwebtoken';
+import { Token } from 'marked';
 
 export class UserController {
     constructor(
@@ -9,8 +11,17 @@ export class UserController {
     ) { }
 
     @get('/users')
-    async findUsers(): Promise<User[]> {
+    async getAllUsers(@param.query.string('jwt') jwt: string): Promise<Array<User>>
+   /*  async findUsers(): Promise<User[]> */ {
+    if (!jwt) {
+        throw new HttpErrors.Unauthorized("Jwt not valid");
+    }    
+    try {
+        verify(jwt, 'shh');
         return await this.userRepo.find();
+    } catch (err) {
+        throw new HttpErrors.BadRequest("Jwt not verifiable");
+    }
     }
 
     @get('/users/{id}')

@@ -2,6 +2,8 @@ import { repository } from "@loopback/repository";
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
 import { HttpErrors, post, requestBody } from '@loopback/rest';
+import {sign, verify} from 'jsonwebtoken';
+
 
 export class LoginController {
   constructor(
@@ -9,8 +11,8 @@ export class LoginController {
   ) {}
 
   @post('/login')
-  async loginUser(@requestBody() user: User): Promise<User> {
-    // Check that email and password are both supplied
+  async loginUser(@requestBody() user: User): Promise<any> {
+    /* // Check that email and password are both supplied
     if (!user.email || !user.password) {
       throw new HttpErrors.Unauthorized('invalid credentials');
     }
@@ -35,5 +37,39 @@ export class LoginController {
         ],
       },
     });
+  } */
+  var users = await this.userRepo.find();
+
+  var email = user.email;
+  var password = user.password;
+
+  for (var i = 0; i < users.length; i++) {
+    var user = users[i];
+    if (user.email == email && user.password == password) {
+
+      var jwt = sign(
+        {
+          user: {
+            id: user.id,
+            firstname: user.firstname,
+            email: user.email
+          },
+          anything: "hello"
+        },
+        'shh',
+        {
+          issuer: 'auth.ix.co.za',
+          audience: 'ix.co.za',
+        },
+      );
+      
+      return {
+        token: jwt,
+      };
+    }
   }
+
+  throw new HttpErrors.Unauthorized('User not found, sorry!');
+  //return "Error";
+}
 }

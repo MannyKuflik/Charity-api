@@ -15,12 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
 const rest_1 = require("@loopback/rest");
+const jsonwebtoken_1 = require("jsonwebtoken");
 let UserController = class UserController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async findUsers() {
-        return await this.userRepo.find();
+    async getAllUsers(jwt) {
+        if (!jwt) {
+            throw new rest_1.HttpErrors.Unauthorized("Jwt not valid");
+        }
+        try {
+            jsonwebtoken_1.verify(jwt, 'shh');
+            return await this.userRepo.find();
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.BadRequest("Jwt not verifiable");
+        }
     }
     async findUsersById(id) {
         let userExists = !!(await this.userRepo.count({ id }));
@@ -35,10 +45,11 @@ let UserController = class UserController {
 };
 __decorate([
     rest_1.get('/users'),
+    __param(0, rest_1.param.query.string('jwt')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "findUsers", null);
+], UserController.prototype, "getAllUsers", null);
 __decorate([
     rest_1.get('/users/{id}'),
     __param(0, rest_1.param.path.number('id')),
