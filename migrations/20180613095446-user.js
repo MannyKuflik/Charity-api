@@ -18,7 +18,8 @@ exports.up = function (db, callback) {
   db.createTable('user', {
     id: {
       type: 'int',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     firstname: {
       type: 'string',
@@ -34,7 +35,7 @@ exports.up = function (db, callback) {
     },
     password: {
       type: 'string',
-      length: 20
+      length: 2048
     }
   }, callback);
 };

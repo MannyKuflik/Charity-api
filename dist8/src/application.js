@@ -22,22 +22,14 @@ class GoldenThreadApiApplication extends boot_1.BootMixin(repository_1.Repositor
                 nested: true,
             },
         };
-        var environment = process.env.NODE_ENV;
-        var databaseName = null;
-        var databasePassword = '';
-        var databaseUsername = 'root';
-        if (environment == "renee") {
-            databaseName = process.env.DATABASE_NAME;
-        }
-        //connects to a MYSQL database
         var dataSourceConfig = new repository_1.juggler.DataSource({
             name: "db",
             connector: 'loopback-connector-mysql',
             host: '127.0.0.1',
             port: 3306,
-            database: databaseName,
-            user: databaseUsername,
-            password: databasePassword
+            database: 'golden_thread',
+            user: 'root',
+            password: ''
         });
         this.dataSource(dataSourceConfig);
     }

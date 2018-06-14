@@ -17,6 +17,7 @@ const user_repository_1 = require("../repositories/user.repository");
 const user_1 = require("../models/user");
 const rest_1 = require("@loopback/rest");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
@@ -53,7 +54,7 @@ let LoginController = class LoginController {
         var password = user.password;
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
-            if (user.email == email && user.password == password) {
+            if (user.email == email && bcrypt.compare(password, user.password)) {
                 var jwt = jsonwebtoken_1.sign({
                     user: {
                         id: user.id,
@@ -67,6 +68,7 @@ let LoginController = class LoginController {
                 });
                 return {
                     token: jwt,
+                    firstname: user.firstname,
                 };
             }
         }

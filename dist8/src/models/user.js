@@ -36,12 +36,6 @@ __decorate([
 ], User.prototype, "lastname", void 0);
 __decorate([
     repository_1.property({
-        type: 'string'
-    }),
-    __metadata("design:type", String)
-], User.prototype, "dob", void 0);
-__decorate([
-    repository_1.property({
         type: 'string',
         required: true,
     }),
