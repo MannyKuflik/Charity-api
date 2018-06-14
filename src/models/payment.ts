@@ -5,34 +5,46 @@ import { Entity, property, model } from '@loopback/repository';
 })
 export class Payment extends Entity {
     @property({
-        type: 'string',
-        required: true
-    })
-    name: string;
-
-    @property({
         type: 'number',
         id: true
     })
     id?: number;
 
     @property({
-        type: 'number',
+        type: 'string',
         required: true
     })
-    expiry_day : number;
+    full_name: string;
 
     @property({
         type: 'number',
         required: true
     })
-    expiry_month: number;
+    number: number;
+    
+    @property({
+        type: 'number',
+        required: true
+    })
+    expday : number;
+
+    @property({
+        type: 'number',
+        required: true
+    })
+    expmonth: number;
+
+    @property({
+        type: 'number',
+        required: true
+    })
+    expyear: number;
 
     @property({
         type: 'string',
         required: true
     })
-    security_code: string;
+    securitycode: string;
 
     getId() {
         return this.id;
