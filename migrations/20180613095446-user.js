@@ -28,9 +28,6 @@ exports.up = function (db, callback) {
       type: 'string',
       length: 20
     },
-    dob: {
-      type: 'date'
-    },
     email: {
       type: 'string',
       length: 50
