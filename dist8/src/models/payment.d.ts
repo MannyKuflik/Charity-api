@@ -1,9 +1,11 @@
 import { Entity } from '@loopback/repository';
 export declare class Payment extends Entity {
-    name: string;
     id?: number;
-    expiry_day: number;
-    expiry_month: number;
-    security_code: string;
+    full_name: string;
+    number: number;
+    expday: number;
+    expmonth: number;
+    expyear: number;
+    securitycode: string;
     getId(): number | undefined;
 }
