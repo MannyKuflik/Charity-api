@@ -21,6 +21,11 @@ export class User extends Entity {
   lastname: number;
 
   @property({
+    type: 'string'
+  })
+  dob: string;
+
+  @property({
     type: 'string',
     required: true,
   })
