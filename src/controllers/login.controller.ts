@@ -3,7 +3,7 @@ import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
 import { HttpErrors, post, requestBody } from '@loopback/rest';
 import {sign, verify} from 'jsonwebtoken';
-
+import * as bcrypt from 'bcrypt';
 
 export class LoginController {
   constructor(
@@ -45,7 +45,7 @@ export class LoginController {
 
   for (var i = 0; i < users.length; i++) {
     var user = users[i];
-    if (user.email == email && user.password == password) {
+    if (user.email == email && bcrypt.compare(password, user.password)) {
 
       var jwt = sign(
         {
@@ -65,6 +65,7 @@ export class LoginController {
       
       return {
         token: jwt,
+        firstname: user.firstname,
       };
     }
   }
