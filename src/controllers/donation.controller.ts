@@ -11,23 +11,132 @@ import { Donation } from "../models/donation";
 export class DonationsController {
 
     constructor(
-        @repository(DonationRepository.name) private userRepo: UserRepository, private charityRepo: CharityRepository, private donationRepo: DonationRepository
-    ) { }
+        @repository(UserRepository) private userRepo: UserRepository,
+        @repository(CharityRepository) private charityRepo: CharityRepository,
+        @repository(DonationRepository) private donationRepo: DonationRepository) { }
 
     @post('/donations')
-    async makeDonation(@requestBody() donation: Donation) {
-        if (!(await this.userRepo.count({ id: donation.user.getId() }))) {
+    async makeDonation(@requestBody() donation: Donation): Promise<Donation> {
+        // if (!(await this.userRepo.count({ id: donation.user.getId() }))) {
+        //     throw new HttpErrors.Unauthorized('user does not exist');
+        // }
+
+        // if (!(await this.charityRepo.count({ id: donation.charity.getId() }))) {
+        //     throw new HttpErrors.Unauthorized('charity does not exist');
+        // }
+        if (!(await this.userRepo.count({ id: donation.user_id }))) {
             throw new HttpErrors.Unauthorized('user does not exist');
         }
 
-        if (!(await this.charityRepo.count({ id: donation.charity.getId() }))) {
+        if (!(await this.charityRepo.count({ id: donation.charity_id }))) {
             throw new HttpErrors.Unauthorized('charity does not exist');
         }
 
-        if( donation.amount <= 0 ) {
+        if (donation.amount <= 0) {
             throw new HttpErrors.Unauthorized('amount is less than or equal to 0');
         }
 
-        return await this.donationRepo.create(donation);
+        await this.donationRepo.create(donation);
+        return donation;
+    }
+
+    @get('/charities')
+    async findDonations(): Promise<Donation[]> {
+        return await this.donationRepo.find();
+    }
+    @get('/charities/{id}')
+    async findDonationsById(@param.path.number('id') id: number): Promise<Donation> {
+
+        let donationExists: boolean = !!(await this.donationRepo.count({ id }));
+
+        if (!donationExists) {
+            throw new HttpErrors.BadRequest(`charity ID ${id} does not exist`);
+        }
+
+        return await this.donationRepo.findById(id);
+    }
+
+    @get('/donations/{userid}')
+    async getAllUserCharityNamesAmounts(@param.path.number('userid') userid: number): Promise<Array<string>> {
+        var ids = new Array();
+        var charities = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length + 1;
+        for (var i = 1; i < l; i++) {
+            var donation = await this.donationRepo.findById(i);
+            if (userid == donation.user_id) {
+                if (!ids.includes(donation.charity_id)) {
+                    ids.push(donation.charity_id);
+                    charities.push("Donated " + donation.amount + " dollars to " + donation.charity_name + 
+                    "          ");
+                }
+            }
+        }
+        return await charities;
+    }
+
+    @get('/donations/names/{userid}')
+    async getAllUserCharityNames(@param.path.number('userid') userid: number): Promise<Array<string>> {
+        var ids = new Array();
+        var charities = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length + 1;
+        for (var i = 1; i < l; i++) {
+            var donation = await this.donationRepo.findById(i);
+            if (userid == donation.user_id) {
+                if (!ids.includes(donation.charity_id)) {
+                    ids.push(donation.charity_id);
+                    charities.push(donation.charity_name + 
+                    " ");
+                }
+            }
+        }
+        return await charities;
+    }
+
+    @get('/donations/money/{userid}')
+    async getAllUserDonationTotal(@param.path.number('userid') userid: number): Promise<number> {
+        var total = 0;
+        var arr = await this.findDonations();
+        var l = arr.length + 1;
+        for (var i = 1; i < l; i++) {
+            var donation = await this.donationRepo.findById(i);
+            if (userid == donation.user_id) {
+                total += donation.amount;
+                }
+            }
+        return await total;
+    }
+
+    @get('/donations/ids/{userid}')
+    async getAllUserCharityids(@param.path.number('userid') userid: number): Promise<Array<number>> {
+        var ids = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length + 1;
+        for (var i = 1; i < l; i++) {
+            var donation = await this.donationRepo.findById(i);
+            if (userid == donation.user_id) {
+                if (!ids.includes(donation.charity_id)) {
+                    ids.push(donation.charity_id);
+                }
+            }
+        }
+        return await ids;
+    }
+
+    @get('/donations/num/{userid}')
+    async getNumUserCharities(@param.path.number('userid') userid: number): Promise<number> {
+        var ids = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length + 1;
+        for (var i = 1; i < l; i++) {
+            var donation = await this.donationRepo.findById(i);
+            if (userid == donation.user_id) {
+                if (!ids.includes(donation.charity_id)) {
+                    ids.push(donation.charity_id);
+                }
+            }
+        }
+        return await ids.length;
     }
 }

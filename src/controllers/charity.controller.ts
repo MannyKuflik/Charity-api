@@ -10,7 +10,9 @@ import { PostRepository } from "../repositories/post.repository"
 
 export class CharityController {
   constructor(
-    @repository(CharityRepository) protected charityRepo: CharityRepository, protected projectRepo: ProjectRepository, protected postRepo: PostRepository
+    @repository(CharityRepository) protected charityRepo: CharityRepository, 
+    @repository(ProjectRepository) protected projectRepo: ProjectRepository, 
+    @repository(PostRepository) protected postRepo: PostRepository
   ) { }
 
   @get('/charities')
@@ -29,6 +31,20 @@ export class CharityController {
 
     return await this.charityRepo.findById(id);
   }
+
+  // @get('/charities/user/{userid}')
+  // async getAllUserCharities(@param.path.number('userid') userid: number): Promise<Array<Charity>> {
+  //   var charities = new Array();
+  //   var arr = await this.findCharities();
+  //   var l = arr.length + 1;
+  //   for (var i = 1; i < l; i++) {
+  //  var char = await this.findCharitiesById(i)
+  //  if (userid == char.id){
+  //    charities.push(char);
+  //     }
+  //   }
+  //   return await charities;
+  // }
 
   @get('/charities/{id}/projects')
   async getAllCharityProjects(@param.path.number('id') id: number): Promise<Array<Project>> {

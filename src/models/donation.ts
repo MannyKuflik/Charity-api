@@ -29,6 +29,11 @@ export class Donation extends Entity {
     })
     charity_id: number;
 
+    @property({
+        type: 'string',
+    })
+    charity_name: string;
+
     getId() {
         return this.id;
     }

@@ -23,32 +23,6 @@ let LoginController = class LoginController {
         this.userRepo = userRepo;
     }
     async loginUser(user) {
-        /* // Check that email and password are both supplied
-        if (!user.email || !user.password) {
-          throw new HttpErrors.Unauthorized('invalid credentials');
-        }
-    
-        // Check that email and password are valid
-        let userExists: boolean = !!(await this.userRepo.count({
-          and: [
-            { email: user.email },
-            { password: user.password },
-          ],
-        }));
-    
-        if (!userExists) {
-          throw new HttpErrors.Unauthorized('invalid credentials');
-        }
-    
-        return await this.userRepo.findOne({
-          where: {
-            and: [
-              { email: user.email },
-              { password: user.password }
-            ],
-          },
-        });
-      } */
         var users = await this.userRepo.find();
         var email = user.email;
         var password = user.password;
@@ -59,12 +33,14 @@ let LoginController = class LoginController {
                     user: {
                         id: user.id,
                         firstname: user.firstname,
+                        lastname: user.lastname,
                         email: user.email
                     },
                     anything: "hello"
                 }, 'shh', {
                     issuer: 'auth.ix.co.za',
                     audience: 'ix.co.za',
+                    expiresIn: '1',
                 });
                 return {
                     token: jwt,

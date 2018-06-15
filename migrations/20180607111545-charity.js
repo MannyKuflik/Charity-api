@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, callback) {
-  db.createTable('payment', {
+  db.createTable('charity', {
     id: {
       type: 'int',
       primaryKey: true
@@ -42,7 +42,7 @@ exports.up = function (db, callback) {
 };
 
 exports.down = function (db, callback) {
-  db.dropTable('payment')
+  db.dropTable('charity')
   return null;
 };
 

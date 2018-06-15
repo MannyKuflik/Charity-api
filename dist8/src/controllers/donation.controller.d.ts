@@ -8,4 +8,11 @@ export declare class DonationsController {
     private donationRepo;
     constructor(userRepo: UserRepository, charityRepo: CharityRepository, donationRepo: DonationRepository);
     makeDonation(donation: Donation): Promise<Donation>;
+    findDonations(): Promise<Donation[]>;
+    findDonationsById(id: number): Promise<Donation>;
+    getAllUserCharityNamesAmounts(userid: number): Promise<Array<string>>;
+    getAllUserCharityNames(userid: number): Promise<Array<string>>;
+    getAllUserDonationTotal(userid: number): Promise<number>;
+    getAllUserCharityids(userid: number): Promise<Array<number>>;
+    getNumUserCharities(userid: number): Promise<number>;
 }
