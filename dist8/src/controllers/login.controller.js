@@ -40,7 +40,7 @@ let LoginController = class LoginController {
                 }, 'shh', {
                     issuer: 'auth.ix.co.za',
                     audience: 'ix.co.za',
-                    expiresIn: '1',
+                    expiresIn: '24hr',
                 });
                 return {
                     token: jwt,

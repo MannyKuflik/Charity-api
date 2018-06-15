@@ -1,9 +1,9 @@
 import { repository } from '@loopback/repository';
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
-import { HttpErrors, get, param } from '@loopback/rest';
-import { sign, verify } from'jsonwebtoken';
-import { Token } from 'marked';
+import { HttpErrors, get, param, put, requestBody } from '@loopback/rest';
+import { sign, verify } from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
 
 export class UserController {
     constructor(
@@ -13,15 +13,15 @@ export class UserController {
     @get('/users')
     async getAllUsers(@param.query.string('jwt') jwt: string): Promise<Array<User>>
    /*  async findUsers(): Promise<User[]> */ {
-    if (!jwt) {
-        throw new HttpErrors.Unauthorized("Jwt not valid");
-    }    
-    try {
-        verify(jwt, 'shh');
-        return await this.userRepo.find();
-    } catch (err) {
-        throw new HttpErrors.BadRequest("Jwt not verifiable");
-    }
+        if (!jwt) {
+            throw new HttpErrors.Unauthorized("Jwt not valid");
+        }
+        try {
+            verify(jwt, 'shh');
+            return await this.userRepo.find();
+        } catch (err) {
+            throw new HttpErrors.BadRequest("Jwt not verifiable");
+        }
     }
 
     @get('/users/{id}')
@@ -43,4 +43,44 @@ export class UserController {
     ) {
         // Some awesome logic down here...
     }
+
+    // @put('/users/{user_id}/settings')
+    // async updateUsersInfo(@requestBody() user: User): Promise<User> {
+    //     var users = await this.userRepo.find();
+
+    //     var email = user.email;
+    //     var password = user.password;
+
+    //     for (var i = 0; i < users.length; i++) {
+    //         var user = users[i];
+    //         if (user.email == email && bcrypt.compare(password, user.password)) {
+
+    //             var jwt = sign(
+    //                 {
+    //                     user: {
+    //                         id: user.id,
+    //                         firstname: user.firstname,
+    //                         lastname: user.lastname,
+    //                         email: user.email
+    //                     },
+    //                     anything: "hello"
+    //                 },
+    //                 'shh',
+    //                 {
+    //                     issuer: 'auth.ix.co.za',
+    //                     audience: 'ix.co.za',
+    //                     expiresIn: '24hr',
+    //                 },
+    //             );
+
+    //             return {
+    //                 token: jwt,
+    //                 firstname: user.firstname,
+    //             };
+    //         }
+    //     }
+
+    //     throw new HttpErrors.Unauthorized('User not found, sorry!');
+    //     //return "Error";
+    // }
 }
