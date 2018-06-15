@@ -68,7 +68,7 @@ let DonationsController = class DonationsController {
                 }
             }
         }
-        return await charities;
+        return charities;
     }
     async getAllUserCharityNames(userid) {
         var ids = new Array();
@@ -85,7 +85,7 @@ let DonationsController = class DonationsController {
                 }
             }
         }
-        return await charities;
+        return charities;
     }
     async getAllUserDonationTotal(userid) {
         var total = 0;
@@ -97,7 +97,7 @@ let DonationsController = class DonationsController {
                 total += donation.amount;
             }
         }
-        return await total;
+        return total;
     }
     async getAllUserCharityids(userid) {
         var ids = new Array();
@@ -111,7 +111,7 @@ let DonationsController = class DonationsController {
                 }
             }
         }
-        return await ids;
+        return ids;
     }
     async getNumUserCharities(userid) {
         var ids = new Array();
@@ -125,7 +125,7 @@ let DonationsController = class DonationsController {
                 }
             }
         }
-        return await ids.length;
+        return ids.length;
     }
 };
 __decorate([

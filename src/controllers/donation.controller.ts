@@ -72,7 +72,7 @@ export class DonationsController {
                 }
             }
         }
-        return await charities;
+        return charities;
     }
 
     @get('/donations/names/{userid}')
@@ -91,7 +91,7 @@ export class DonationsController {
                 }
             }
         }
-        return await charities;
+        return charities;
     }
 
     @get('/donations/money/{userid}')
@@ -105,7 +105,7 @@ export class DonationsController {
                 total += donation.amount;
                 }
             }
-        return await total;
+        return total;
     }
 
     @get('/donations/ids/{userid}')
@@ -121,7 +121,7 @@ export class DonationsController {
                 }
             }
         }
-        return await ids;
+        return ids;
     }
 
     @get('/donations/num/{userid}')
@@ -137,6 +137,6 @@ export class DonationsController {
                 }
             }
         }
-        return await ids.length;
+        return ids.length;
     }
 }

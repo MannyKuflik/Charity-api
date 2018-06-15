@@ -44,43 +44,14 @@ export class UserController {
         // Some awesome logic down here...
     }
 
-    // @put('/users/{user_id}/settings')
-    // async updateUsersInfo(@requestBody() user: User): Promise<User> {
-    //     var users = await this.userRepo.find();
-
-    //     var email = user.email;
-    //     var password = user.password;
-
-    //     for (var i = 0; i < users.length; i++) {
-    //         var user = users[i];
-    //         if (user.email == email && bcrypt.compare(password, user.password)) {
-
-    //             var jwt = sign(
-    //                 {
-    //                     user: {
-    //                         id: user.id,
-    //                         firstname: user.firstname,
-    //                         lastname: user.lastname,
-    //                         email: user.email
-    //                     },
-    //                     anything: "hello"
-    //                 },
-    //                 'shh',
-    //                 {
-    //                     issuer: 'auth.ix.co.za',
-    //                     audience: 'ix.co.za',
-    //                     expiresIn: '24hr',
-    //                 },
-    //             );
-
-    //             return {
-    //                 token: jwt,
-    //                 firstname: user.firstname,
-    //             };
-    //         }
-    //     }
-
-    //     throw new HttpErrors.Unauthorized('User not found, sorry!');
-    //     //return "Error";
-    // }
+    @put('/users/settings')
+    async updateUsersInfo(@requestBody() user: User) {
+        var use = await this.userRepo.findById(user.id);
+        let newhashedPassword = await bcrypt.hash(use.password, 10);
+        use.firstname = user.firstname;
+        //     "lastname": user.lastname,
+        //         email: user.email;
+        // id: user.id;
+        // password: newhashedPassword;
+    }
 }
