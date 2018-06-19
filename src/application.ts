@@ -32,16 +32,26 @@ export class GoldenThreadApiApplication extends BootMixin(
         nested: true,
       },
     };
+    // var dataSourceConfig = new juggler.DataSource({
+    //         name: "db",
+    //         connector: 'loopback-connector-mysql',
+    //         host: '127.0.0.1',
+    //         port: 3306,
+    //         database: 'golden_thread',
+    //         user: 'root',
+    //         password: ''
+    //       });
+    // this.dataSource(dataSourceConfig);
 
     var dataSourceConfig = new juggler.DataSource({
-            name: "db",
-            connector: 'loopback-connector-mysql',
-            host: '127.0.0.1',
-            port: 3306,
-            database: 'golden_thread',
-            user: 'root',
-            password: ''
-          });
+      name: "db",
+      connector: 'loopback-connector-mysql',
+      host: process.env.DATABASE_HOST,
+      port: 3306,
+      database: process.env.DATABASE_NAME,
+      user: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD
+    });
     this.dataSource(dataSourceConfig);
   }
 

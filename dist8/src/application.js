@@ -22,14 +22,24 @@ class GoldenThreadApiApplication extends boot_1.BootMixin(repository_1.Repositor
                 nested: true,
             },
         };
+        // var dataSourceConfig = new juggler.DataSource({
+        //         name: "db",
+        //         connector: 'loopback-connector-mysql',
+        //         host: '127.0.0.1',
+        //         port: 3306,
+        //         database: 'golden_thread',
+        //         user: 'root',
+        //         password: ''
+        //       });
+        // this.dataSource(dataSourceConfig);
         var dataSourceConfig = new repository_1.juggler.DataSource({
             name: "db",
             connector: 'loopback-connector-mysql',
-            host: '127.0.0.1',
+            host: process.env.DATABASE_HOST,
             port: 3306,
-            database: 'golden_thread',
-            user: 'root',
-            password: ''
+            database: process.env.DATABASE_NAME,
+            user: process.env.DATABASE_USERNAME,
+            password: process.env.DATABASE_PASSWORD
         });
         this.dataSource(dataSourceConfig);
     }
