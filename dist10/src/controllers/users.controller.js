@@ -14,8 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
+const user_1 = require("../models/user");
 const rest_1 = require("@loopback/rest");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 let UserController = class UserController {
     constructor(userRepo) {
         this.userRepo = userRepo;
@@ -42,6 +44,15 @@ let UserController = class UserController {
     async getDonationsByUserId(userId, dateFrom, authorizationToken) {
         // Some awesome logic down here...
     }
+    async updateUsersInfo(user) {
+        var use = await this.userRepo.findById(user.id);
+        let newhashedPassword = await bcrypt.hash(use.password, 10);
+        use.firstname = user.firstname;
+        //     "lastname": user.lastname,
+        //         email: user.email;
+        // id: user.id;
+        // password: newhashedPassword;
+    }
 };
 __decorate([
     rest_1.get('/users'),
@@ -67,6 +78,13 @@ __decorate([
         String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getDonationsByUserId", null);
+__decorate([
+    rest_1.put('/users/settings'),
+    __param(0, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_1.User]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateUsersInfo", null);
 UserController = __decorate([
     __param(0, repository_1.repository(user_repository_1.UserRepository)),
     __metadata("design:paramtypes", [user_repository_1.UserRepository])

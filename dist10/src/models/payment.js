@@ -17,13 +17,6 @@ let Payment = class Payment extends repository_1.Entity {
 };
 __decorate([
     repository_1.property({
-        type: 'string',
-        required: true
-    }),
-    __metadata("design:type", String)
-], Payment.prototype, "name", void 0);
-__decorate([
-    repository_1.property({
         type: 'number',
         id: true
     }),
@@ -31,25 +24,46 @@ __decorate([
 ], Payment.prototype, "id", void 0);
 __decorate([
     repository_1.property({
-        type: 'number',
+        type: 'string',
         required: true
     }),
-    __metadata("design:type", Number)
-], Payment.prototype, "expiry_day", void 0);
+    __metadata("design:type", String)
+], Payment.prototype, "full_name", void 0);
 __decorate([
     repository_1.property({
         type: 'number',
         required: true
     }),
     __metadata("design:type", Number)
-], Payment.prototype, "expiry_month", void 0);
+], Payment.prototype, "number", void 0);
+__decorate([
+    repository_1.property({
+        type: 'number',
+        required: true
+    }),
+    __metadata("design:type", Number)
+], Payment.prototype, "expday", void 0);
+__decorate([
+    repository_1.property({
+        type: 'number',
+        required: true
+    }),
+    __metadata("design:type", Number)
+], Payment.prototype, "expmonth", void 0);
+__decorate([
+    repository_1.property({
+        type: 'number',
+        required: true
+    }),
+    __metadata("design:type", Number)
+], Payment.prototype, "expyear", void 0);
 __decorate([
     repository_1.property({
         type: 'string',
         required: true
     }),
     __metadata("design:type", String)
-], Payment.prototype, "security_code", void 0);
+], Payment.prototype, "securitycode", void 0);
 Payment = __decorate([
     repository_1.model({
         name: "payment"

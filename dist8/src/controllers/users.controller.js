@@ -45,12 +45,13 @@ let UserController = class UserController {
         // Some awesome logic down here...
     }
     async updateUsersInfo(user) {
-        let newhashedPassword = await bcrypt.hash(user.password, 10);
-        firstname: user.firstname;
-        lastname: user.lastname;
-        email: user.email;
-        id: user.id;
-        password: newhashedPassword;
+        var use = await this.userRepo.findById(user.id);
+        let newhashedPassword = await bcrypt.hash(use.password, 10);
+        use.firstname = user.firstname;
+        //     "lastname": user.lastname,
+        //         email: user.email;
+        // id: user.id;
+        // password: newhashedPassword;
     }
 };
 __decorate([

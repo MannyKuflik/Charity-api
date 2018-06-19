@@ -35,6 +35,19 @@ let CharityController = class CharityController {
         }
         return await this.charityRepo.findById(id);
     }
+    // @get('/charities/user/{userid}')
+    // async getAllUserCharities(@param.path.number('userid') userid: number): Promise<Array<Charity>> {
+    //   var charities = new Array();
+    //   var arr = await this.findCharities();
+    //   var l = arr.length + 1;
+    //   for (var i = 1; i < l; i++) {
+    //  var char = await this.findCharitiesById(i)
+    //  if (userid == char.id){
+    //    charities.push(char);
+    //     }
+    //   }
+    //   return await charities;
+    // }
     async getAllCharityProjects(id) {
         return await this.projectRepo.find();
     }
@@ -81,7 +94,11 @@ __decorate([
 ], CharityController.prototype, "makeCharityProjectPosts", null);
 CharityController = __decorate([
     __param(0, repository_1.repository(charity_repository_1.CharityRepository)),
-    __metadata("design:paramtypes", [charity_repository_1.CharityRepository, project_repository_1.ProjectRepository, post_repository_1.PostRepository])
+    __param(1, repository_1.repository(project_repository_1.ProjectRepository)),
+    __param(2, repository_1.repository(post_repository_1.PostRepository)),
+    __metadata("design:paramtypes", [charity_repository_1.CharityRepository,
+        project_repository_1.ProjectRepository,
+        post_repository_1.PostRepository])
 ], CharityController);
 exports.CharityController = CharityController;
 //# sourceMappingURL=charity.controller.js.map
