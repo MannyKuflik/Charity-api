@@ -32,7 +32,9 @@
     "start": "node .",
     "prepublishOnly": "npm run test",
     "connor": "NODE_ENV=miki DATABASE_NAME=cryptosafari npm start",
-    "manny": "DATABASE_HOST=localhost DATABASE_NAME=golden_thread DATABASE_USERNAME=root DATABASE_PASSWORD= npm start"
+    "manny": "DATABASE_HOST=localhost DATABASE_NAME=golden_thread DATABASE_USERNAME=root DATABASE_PASSWORD= npm start",
+    "renee": "DATABASE_HOST=localhost DATABASE_NAME=golden_thread DATABASE_USERNAME=root DATABASE_PASSWORD=DTgpxz38 npm start"
+
 
   },
   "repository": {
