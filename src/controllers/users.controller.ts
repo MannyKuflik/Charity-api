@@ -50,7 +50,9 @@ export class UserController {
         var uin = body.user as User;
         // var use = await this.userRepo.findById(user.id);
         var user = await this.userRepo.findById(uin.id)
-        if (bcrypt.compare(body.user.password, uin.password)) {
+        let check = await bcrypt.compare(body.user.password, user.password)
+        console.log(check);
+        if (check) {
         user.firstname = uin.firstname;
         user.lastname = uin.lastname,
         user.email = uin.email;
@@ -84,7 +86,6 @@ export class UserController {
           };
         }
         else {
-            alert("Incorrect Password. Input correct password to apply setting changes");
             throw new HttpErrors.Unauthorized("incorrect password");
         }
     }

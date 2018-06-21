@@ -19,7 +19,9 @@ export class LoginController {
 
   for (var i = 0; i < users.length; i++) {
     var user = users[i];
-    if (user.email == email && bcrypt.compare(password, user.password)) {
+    let check = await bcrypt.compare(password, user.password)
+    console.log(check);
+    if (user.email == email && check) {
 
       var jwt = sign(
         {
