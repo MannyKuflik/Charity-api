@@ -43,7 +43,7 @@ export class CharityController {
   //    charities.push(char);
   //     }
   //   }
-  //   return await charities;
+  //   return charities;
   // }
 
   @get('/charities/{id}/projects')

@@ -45,13 +45,38 @@ export class UserController {
     }
 
     @put('/users/settings')
-    async updateUsersInfo(@requestBody() user: User) {
-        var use = await this.userRepo.findById(user.id);
-        let newhashedPassword = await bcrypt.hash(use.password, 10);
-        use.firstname = user.firstname;
-        //     "lastname": user.lastname,
-        //         email: user.email;
-        // id: user.id;
-        // password: newhashedPassword;
+    async updateUsersInfo(@requestBody() user: User): Promise<any> {
+        // var use = await this.userRepo.findById(user.id);
+        user = await this.userRepo.findById(user.id)
+        user.firstname = user.firstname;
+        user.lastname = user.lastname,
+        user.email = user.email;
+        user.id = user.id;
+        let newhashedPassword = await bcrypt.hash(user.password, 10);
+        user.password = newhashedPassword;
+        await this.userRepo.save(user);
+        console.log("info updated");
+        
+        var jwt = sign(
+            {
+              user: {
+                id: user.id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email
+              },
+              anything: "hello"
+            },
+            'shh', 
+            {
+              issuer: 'auth.ix.co.za',
+              audience: 'ix.co.za',
+              expiresIn: '24hr',
+            },
+          );
+          
+          return {
+            token: jwt
+          };
     }
 }
