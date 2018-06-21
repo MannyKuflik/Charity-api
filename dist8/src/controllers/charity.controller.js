@@ -46,7 +46,7 @@ let CharityController = class CharityController {
     //    charities.push(char);
     //     }
     //   }
-    //   return await charities;
+    //   return charities;
     // }
     async getAllCharityProjects(id) {
         return await this.projectRepo.find();

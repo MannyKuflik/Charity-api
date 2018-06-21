@@ -25,12 +25,6 @@ let DonationsController = class DonationsController {
         this.donationRepo = donationRepo;
     }
     async makeDonation(donation) {
-        // if (!(await this.userRepo.count({ id: donation.user.getId() }))) {
-        //     throw new HttpErrors.Unauthorized('user does not exist');
-        // }
-        // if (!(await this.charityRepo.count({ id: donation.charity.getId() }))) {
-        //     throw new HttpErrors.Unauthorized('charity does not exist');
-        // }
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
