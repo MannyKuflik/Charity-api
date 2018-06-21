@@ -17,5 +17,14 @@
         "user": {"ENV": "DATABASE_USERNAME"},
         "password": {"ENV": "DATABASE_PASSWORD"},
         "database": {"ENV": "DATABASE_NAME"}
+    },
+    
+    "connor": {
+        "driver": "mysql",
+        "host": "localhost",
+        "port": "3306",
+        "user": "root",
+        "password": "",
+        "database": "golden_thread"
     }
 }
