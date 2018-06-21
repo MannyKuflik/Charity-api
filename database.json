@@ -1,10 +1,21 @@
 {
-    "dev": {
+    "defaultEnv": {"ENV": "NODE_ENV"},
+
+    "manny": {
         "driver": "mysql",
-        "host": "ix-fs-1.ce5d5ftkvwyr.eu-west-1.rds.amazonaws.com",
+        "host": {"ENV": "DATABASE_HOST"},
         "port": "3306",
-        "user": "ix_fs_1",
-        "password": "ixperience2018",
-        "database": "full_smacked"
+        "user": {"ENV": "DATABASE_USERNAME"},
+        "password": {"ENV": "DATABASE_PASSWORD"},
+        "database": {"ENV": "DATABASE_NAME"}
+    },
+
+    "live": {
+        "driver": "mysql",
+        "host": {"ENV": "DATABASE_HOST"},
+        "port": "3306",
+        "user": {"ENV": "DATABASE_USERNAME"},
+        "password": {"ENV": "DATABASE_PASSWORD"},
+        "database": {"ENV": "DATABASE_NAME"}
     }
 }

@@ -6,5 +6,5 @@ export declare class UserController {
     getAllUsers(jwt: string): Promise<Array<User>>;
     findUsersById(id: number): Promise<User>;
     getDonationsByUserId(userId: number, dateFrom: Date, authorizationToken: String): Promise<void>;
-    updateUsersInfo(user: User): Promise<void>;
+    updateUsersInfo(user: User): Promise<any>;
 }
