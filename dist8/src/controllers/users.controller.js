@@ -48,7 +48,6 @@ let UserController = class UserController {
         // var use = await this.userRepo.findById(user.id);
         var user = await this.userRepo.findById(uin.id);
         let check = await bcrypt.compare(body.user.password, user.password);
-        console.log(check);
         if (check) {
             user.firstname = uin.firstname;
             user.lastname = uin.lastname,
@@ -59,7 +58,6 @@ let UserController = class UserController {
                 user.password = newhashedPassword;
             }
             await this.userRepo.save(user);
-            console.log("info updated");
             var jwt = jsonwebtoken_1.sign({
                 user: {
                     id: user.id,
@@ -78,7 +76,6 @@ let UserController = class UserController {
             };
         }
         else {
-            alert("Incorrect Password. Input correct password to apply setting changes");
             throw new rest_1.HttpErrors.Unauthorized("incorrect password");
         }
     }

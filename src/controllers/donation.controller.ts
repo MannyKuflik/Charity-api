@@ -16,7 +16,7 @@ export class DonationsController {
         @repository(DonationRepository) private donationRepo: DonationRepository) { }
 
     @post('/donations')
-    async makeDonation(@requestBody() donation: Donation): Promise<Donation> {
+    async makeDonation(@requestBody() donation: Donation) {
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
             throw new HttpErrors.Unauthorized('user does not exist');
         }
@@ -30,7 +30,6 @@ export class DonationsController {
         }
 
         await this.donationRepo.create(donation);
-        return donation;
     }
 
     @get('/charities')
@@ -60,8 +59,8 @@ export class DonationsController {
             if (userid == donation.user_id) {
                 if (!ids.includes(donation.charity_id)) {
                     ids.push(donation.charity_id);
-                    charities.push("Donated " + donation.amount + " dollars to " + donation.charity_name + 
-                    "          ");
+                    charities.push("Donated " + donation.amount + " dollars to " + donation.charity_name +
+                        "          ");
                 }
             }
         }
@@ -73,32 +72,41 @@ export class DonationsController {
         var ids = new Array();
         var charities = new Array();
         var arr = await this.findDonations();
-        var l = arr.length + 1;
-        for (var i = 1; i < l; i++) {
-            var donation = await this.donationRepo.findById(i);
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
             if (userid == donation.user_id) {
-                if (!ids.includes(donation.charity_id)) {
+                if (!(ids.includes(donation.charity_id))) {
                     ids.push(donation.charity_id);
-                    charities.push(donation.charity_name + 
-                    " ");
+                    charities.push(donation.charity_name);
                 }
             }
         }
+        if (charities == []) {
+            throw new HttpErrors.ExpectationFailed("no charities");
+        }
+        else{
         return charities;
+        }
     }
 
     @get('/donations/money/{userid}')
     async getAllUserDonationTotal(@param.path.number('userid') userid: number): Promise<number> {
         var total = 0;
         var arr = await this.findDonations();
-        var l = arr.length + 1;
-        for (var i = 1; i < l; i++) {
-            var donation = await this.donationRepo.findById(i);
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
             if (userid == donation.user_id) {
                 total += donation.amount;
-                }
             }
+        }
+        if (total == 0) {
+            throw new HttpErrors.ExpectationFailed("nothing donated");
+        }
+        else{
         return total;
+        }
     }
 
     @get('/donations/ids/{userid}')
@@ -109,7 +117,7 @@ export class DonationsController {
         for (var i = 1; i < l; i++) {
             var donation = await this.donationRepo.findById(i);
             if (userid == donation.user_id) {
-                if (!ids.includes(donation.charity_id)) {
+                if (!(ids.includes(donation.charity_id))) {
                     ids.push(donation.charity_id);
                 }
             }
@@ -117,8 +125,40 @@ export class DonationsController {
         return ids;
     }
 
+    @get('/donations/amnts/{userid}')
+    async getAllUserCharityAmounts(@param.path.number('userid') uid: number): Promise<Array<number>> {
+        var amnts = new Array();
+        var ids = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
+            let check = ids.includes(donation.charity_id);
+            if ((uid == donation.user_id) && (check == false)) {
+                ids.push(donation.charity_id);
+                var tot = donation.amount;
+                var charid = donation.charity_id;
+                for (var j = 1; j < l; j++) {
+                    var donation2 = arr[j];
+                    if ((donation2.user_id == uid) &&
+                        (donation2.charity_id == charid) &&
+                        (donation2.id != donation.id)) {
+                        tot = tot + donation2.amount;
+                    }
+                }
+                amnts.push(tot);
+            }
+        }
+        if (amnts == []) {
+            throw new HttpErrors.ExpectationFailed("no donations made");
+        }
+        else {
+        return amnts;
+        }
+    }
+
     @get('/donations/num/{userid}')
-    async getNumUserCharities(@param.path.number('userid') userid: number): Promise<number> {
+    async getNumUserCharities(@param.query.number('userid') userid: number): Promise<number> {
         var ids = new Array();
         var arr = await this.findDonations();
         var l = arr.length + 1;

@@ -51,7 +51,6 @@ export class UserController {
         // var use = await this.userRepo.findById(user.id);
         var user = await this.userRepo.findById(uin.id)
         let check = await bcrypt.compare(body.user.password, user.password)
-        console.log(check);
         if (check) {
         user.firstname = uin.firstname;
         user.lastname = uin.lastname,
@@ -62,7 +61,6 @@ export class UserController {
         user.password = newhashedPassword;
         }
         await this.userRepo.save(user);
-        console.log("info updated");
         var jwt = sign(
             {
               user: {
