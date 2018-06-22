@@ -35,7 +35,6 @@ let DonationsController = class DonationsController {
             throw new rest_1.HttpErrors.Unauthorized('amount is less than or equal to 0');
         }
         await this.donationRepo.create(donation);
-        return donation;
     }
     async findDonations() {
         return await this.donationRepo.find();
@@ -68,30 +67,39 @@ let DonationsController = class DonationsController {
         var ids = new Array();
         var charities = new Array();
         var arr = await this.findDonations();
-        var l = arr.length + 1;
-        for (var i = 1; i < l; i++) {
-            var donation = await this.donationRepo.findById(i);
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
             if (userid == donation.user_id) {
-                if (!ids.includes(donation.charity_id)) {
+                if (!(ids.includes(donation.charity_id))) {
                     ids.push(donation.charity_id);
-                    charities.push(donation.charity_name +
-                        " ");
+                    charities.push(donation.charity_name);
                 }
             }
         }
-        return charities;
+        if (charities == []) {
+            throw new rest_1.HttpErrors.ExpectationFailed("no charities");
+        }
+        else {
+            return charities;
+        }
     }
     async getAllUserDonationTotal(userid) {
         var total = 0;
         var arr = await this.findDonations();
-        var l = arr.length + 1;
-        for (var i = 1; i < l; i++) {
-            var donation = await this.donationRepo.findById(i);
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
             if (userid == donation.user_id) {
                 total += donation.amount;
             }
         }
-        return total;
+        if (total == 0) {
+            throw new rest_1.HttpErrors.ExpectationFailed("nothing donated");
+        }
+        else {
+            return total;
+        }
     }
     async getAllUserCharityids(userid) {
         var ids = new Array();
@@ -100,12 +108,42 @@ let DonationsController = class DonationsController {
         for (var i = 1; i < l; i++) {
             var donation = await this.donationRepo.findById(i);
             if (userid == donation.user_id) {
-                if (!ids.includes(donation.charity_id)) {
+                if (!(ids.includes(donation.charity_id))) {
                     ids.push(donation.charity_id);
                 }
             }
         }
         return ids;
+    }
+    async getAllUserCharityAmounts(uid) {
+        var amnts = new Array();
+        var ids = new Array();
+        var arr = await this.findDonations();
+        var l = arr.length;
+        for (var i = 0; i < l; i++) {
+            var donation = arr[i];
+            let check = ids.includes(donation.charity_id);
+            if ((uid == donation.user_id) && (check == false)) {
+                ids.push(donation.charity_id);
+                var tot = donation.amount;
+                var charid = donation.charity_id;
+                for (var j = 1; j < l; j++) {
+                    var donation2 = arr[j];
+                    if ((donation2.user_id == uid) &&
+                        (donation2.charity_id == charid) &&
+                        (donation2.id != donation.id)) {
+                        tot = tot + donation2.amount;
+                    }
+                }
+                amnts.push(tot);
+            }
+        }
+        if (amnts == []) {
+            throw new rest_1.HttpErrors.ExpectationFailed("no donations made");
+        }
+        else {
+            return amnts;
+        }
     }
     async getNumUserCharities(userid) {
         var ids = new Array();
@@ -171,8 +209,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DonationsController.prototype, "getAllUserCharityids", null);
 __decorate([
-    rest_1.get('/donations/num/{userid}'),
+    rest_1.get('/donations/amnts/{userid}'),
     __param(0, rest_1.param.path.number('userid')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], DonationsController.prototype, "getAllUserCharityAmounts", null);
+__decorate([
+    rest_1.get('/donations/num/{userid}'),
+    __param(0, rest_1.param.query.number('userid')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)

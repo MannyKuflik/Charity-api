@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
-const user_1 = require("../models/user");
 const rest_1 = require("@loopback/rest");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -44,33 +43,41 @@ let UserController = class UserController {
     async getDonationsByUserId(userId, dateFrom, authorizationToken) {
         // Some awesome logic down here...
     }
-    async updateUsersInfo(user) {
+    async updateUsersInfo(body) {
+        var uin = body.user;
         // var use = await this.userRepo.findById(user.id);
-        user = await this.userRepo.findById(user.id);
-        user.firstname = user.firstname;
-        user.lastname = user.lastname,
-            user.email = user.email;
-        user.id = user.id;
-        let newhashedPassword = await bcrypt.hash(user.password, 10);
-        user.password = newhashedPassword;
-        await this.userRepo.save(user);
-        console.log("info updated");
-        var jwt = jsonwebtoken_1.sign({
-            user: {
-                id: user.id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email
-            },
-            anything: "hello"
-        }, 'shh', {
-            issuer: 'auth.ix.co.za',
-            audience: 'ix.co.za',
-            expiresIn: '24hr',
-        });
-        return {
-            token: jwt
-        };
+        var user = await this.userRepo.findById(uin.id);
+        let check = await bcrypt.compare(body.user.password, user.password);
+        if (check) {
+            user.firstname = uin.firstname;
+            user.lastname = uin.lastname,
+                user.email = uin.email;
+            user.id = uin.id;
+            if (body.npassword.length > 0) {
+                let newhashedPassword = await bcrypt.hash(body.npassword, 10);
+                user.password = newhashedPassword;
+            }
+            await this.userRepo.save(user);
+            var jwt = jsonwebtoken_1.sign({
+                user: {
+                    id: user.id,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                },
+                anything: "hello"
+            }, 'shh', {
+                issuer: 'auth.ix.co.za',
+                audience: 'ix.co.za',
+                expiresIn: '24hr',
+            });
+            return {
+                token: jwt
+            };
+        }
+        else {
+            throw new rest_1.HttpErrors.Unauthorized("incorrect password");
+        }
     }
 };
 __decorate([
@@ -101,7 +108,7 @@ __decorate([
     rest_1.put('/users/settings'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_1.User]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUsersInfo", null);
 UserController = __decorate([
